@@ -141,6 +141,15 @@ function mod.setup(config)
     reclaimed = true
     mod.logger.debug("terminal", "Reclaimed existing Claude pane: " .. pane_id)
   end
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "ClaudeCodeSendComplete",
+    callback = function()
+      if pane_id then
+        vim.fn.system("tmux select-pane -t " .. pane_id)
+      end
+    end,
+  })
 end
 
 local function is_tracked_pane_id_valid()
